@@ -3,10 +3,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "../services/supabase";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-
+import { useEffect, useState } from "react";
 export default function AdminLayout() {
   const navigate = useNavigate();
-
+const [sidebarOpen, setSidebarOpen] = useState(false);
   useEffect(() => {
     const updateActivity = () => {
       localStorage.setItem("last_activity", Date.now());
@@ -53,10 +53,13 @@ if (!lastActivity || Date.now() - lastActivity > ONE_HOUR) {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar />
+ <Sidebar
+  isOpen={sidebarOpen}
+  setIsOpen={setSidebarOpen}
+/>
 
-      <div className="flex-1 flex flex-col">
-        <Topbar />
+<div className="flex-1 flex flex-col md:ml-64">
+  <Topbar setSidebarOpen={setSidebarOpen} />
 
         <main className="flex-1 overflow-auto p-6">
           <Outlet />

@@ -90,18 +90,18 @@ function getElapsedTime(date) {
   return `${Math.floor(diff / 60)} hrs ago`;
 }
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
 
-      <h1 className="text-4xl font-bold mb-8">
+      <h1 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">
         👨‍🍳 Kitchen Display
       </h1>
 
       {orders.length === 0 ? (
-        <div className="text-center text-gray-500 text-2xl mt-20">
+        <div className="text-center text-gray-500 text-lg md:text-2xl mt-20">
           No Orders
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 
         {orders.map((order) => {
 
@@ -113,7 +113,7 @@ function getElapsedTime(date) {
 
     <div
       key={order.id}
-      className={`bg-white rounded-3xl shadow-lg p-6 ${
+      className={`bg-white rounded-3xl shadow-lg p-4 md:p-6 ${
         mins >= 15
           ? "border-4 border-red-500"
           : mins >= 10
@@ -122,10 +122,10 @@ function getElapsedTime(date) {
       }`}
     >
 
-             <div className="flex justify-between items-start">
+             <div className="flex flex-wrap justify-between items-start gap-3">
 
   <div>
-    <h2 className="text-3xl font-bold">
+    <h2 className="text-2xl md:text-3xl font-bold">
       #{order.order_number}
     </h2>
 
@@ -135,7 +135,7 @@ function getElapsedTime(date) {
   <div className="flex flex-col items-end gap-2">
 
     <span
-      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+      className={`px-3 py-1 rounded-full text-xs md:text-sm font-semibold whitespace-nowrap ${
         order.status === "Payment Verified"
           ? "bg-blue-100 text-blue-700"
           : "bg-purple-100 text-purple-700"
@@ -145,7 +145,7 @@ function getElapsedTime(date) {
     </span>
 
     <span
-      className={`px-3 py-1 rounded-full text-xs font-bold ${
+      className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
         mins >= 15
           ? "bg-red-100 text-red-700"
           : mins >= 10
@@ -162,7 +162,7 @@ function getElapsedTime(date) {
 
               <div className="mt-5">
 
-                <h3 className="font-semibold text-lg">
+                <h3 className="font-semibold text-base md:text-lg">
                   {order.customer_name}
                 </h3>
 <div className="mt-6 border-t pt-4">
@@ -178,11 +178,11 @@ function getElapsedTime(date) {
       className="mb-4"
     >
 
-      <div className="flex justify-between items-start">
+      <div className="flex flex-wrap justify-between items-start gap-3">
 
   <div>
 
-    <div className="font-bold text-lg">
+    <div className="font-bold text-base md:text-lg">
       {item.quantity} × {item.product_name}
     </div>
 
@@ -246,7 +246,7 @@ function getElapsedTime(date) {
                     onClick={() =>
                       updateStatus(order.id, "Preparing")
                     }
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 md:py-4 rounded-xl font-bold transition"
                   >
                     👨‍🍳 Start Preparing
                   </button>
@@ -259,7 +259,7 @@ function getElapsedTime(date) {
                     onClick={() =>
                       updateStatus(order.id, "Ready for Pickup")
                     }
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 md:py-4 rounded-xl font-bold transition"
                   >
                     🍽 Ready for Pickup
                   </button>

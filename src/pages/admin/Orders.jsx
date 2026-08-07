@@ -64,35 +64,35 @@ case "Waiting for Payment Verification":
     case "Payment Submitted":
 case "Payment Verified":
   return (
-    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold">
+    <span className="px-3 py-1 rounded-full text-xs md:text-sm whitespace-nowrap bg-blue-100 text-blue-700 font-semibold">
       Payment Verified
     </span>
   );
 
     case "Preparing":
       return (
-        <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-semibold">
+        <span className="px-3 py-1 rounded-full text-xs md:text-sm whitespace-nowrap bg-blue-100 text-blue-700 font-semibold">
           Preparing
         </span>
       );
 
     case "Ready for Pickup":
       return (
-        <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 font-semibold">
+       <span className="px-3 py-1 rounded-full text-xs md:text-sm whitespace-nowrap bg-blue-100 text-blue-700 font-semibold">
           Ready
         </span>
       );
 
     case "Completed":
       return (
-        <span className="px-3 py-1 rounded-full bg-green-600 text-white font-semibold">
+       <span className="px-3 py-1 rounded-full text-xs md:text-sm whitespace-nowrap bg-blue-100 text-blue-700 font-semibold">
           Completed
         </span>
       );
 
     case "Cancelled":
       return (
-        <span className="px-3 py-1 rounded-full bg-red-500 text-white font-semibold">
+        <span className="px-3 py-1 rounded-full text-xs md:text-sm whitespace-nowrap bg-blue-100 text-blue-700 font-semibold">
           Cancelled
         </span>
       );
@@ -117,7 +117,7 @@ async function updateStatus(id, status) {
         Orders
       </h1>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="hidden md:block bg-white rounded-xl shadow overflow-x-auto">
         <table className="w-full">
           <thead className="bg-yellow-500 text-white">
             <tr>
@@ -196,6 +196,88 @@ async function updateStatus(id, status) {
 
         </table>
       </div>
+      <div className="md:hidden space-y-4">
+
+  {orders.map((order) => (
+
+    <div
+      key={order.id}
+      className="bg-white rounded-xl shadow p-4"
+    >
+
+    <div className="flex flex-wrap justify-between items-start gap-2">
+
+        <h2 className="font-bold text-lg">
+          #{order.order_number}
+        </h2>
+
+        {getStatusBadge(order.status)}
+
+      </div>
+
+      <div className="mt-4 space-y-2 text-sm">
+
+        <div>
+          <span className="font-semibold">Customer:</span>{" "}
+          {order.customer_name}
+        </div>
+
+        <div>
+          <span className="font-semibold">Mobile:</span>{" "}
+          {order.mobile}
+        </div>
+
+        <div>
+          <span className="font-semibold">Amount:</span>{" "}
+          ₹{order.subtotal}
+        </div>
+
+        <div>
+          <span className="font-semibold">Time:</span>{" "}
+          {new Date(order.created_at).toLocaleTimeString()}
+        </div>
+
+      </div>
+
+      <div className="mt-4 flex flex-col gap-2">
+
+        <button
+          onClick={() => setSelectedOrder(order)}
+          className="flex justify-center items-center gap-2 border border-slate-300 rounded-lg py-2"
+        >
+          <FiEye size={18} />
+          View
+        </button>
+
+        {order.status === "Waiting for Payment Verification" && (
+          <button
+            onClick={() =>
+              updateStatus(order.id, "Payment Verified")
+            }
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+          >
+            ✔ Verify Payment
+          </button>
+        )}
+
+        {order.status === "Ready for Pickup" && (
+          <button
+            onClick={() =>
+              updateStatus(order.id, "Completed")
+            }
+            className="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition"
+          >
+            ✔ Complete
+          </button>
+        )}
+
+      </div>
+
+    </div>
+
+  ))}
+
+</div>
       <OrderModal
   order={selectedOrder}
   onClose={() => setSelectedOrder(null)}
