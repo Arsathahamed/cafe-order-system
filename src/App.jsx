@@ -1,17 +1,7 @@
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white shadow-xl rounded-xl p-10 text-center">
-        <h1 className="text-4xl font-bold text-violet-600">
-          Tea Order System
-        </h1>
+import AppRoutes from "./routes/AppRoutes";
 
-        <p className="mt-3 text-gray-500">
-          Project Setup Successful 🚀
-        </p>
-      </div>
-    </div>
-  )
+function App() {
+  return <AppRoutes />;
 }
 
-export default App
+export default App;

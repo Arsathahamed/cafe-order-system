@@ -9,45 +9,48 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e) {
+ async function handleLogin(e) {
   e.preventDefault();
 
   setLoading(true);
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-const { data: profile, error: profileError } = await supabase
-  .from("profiles")
-  .select("role")
-  .eq("id", data.user.id)
-  .single();
-  setLoading(false);
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  if (error) {
-    alert(error.message);
-    return;
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .single();
+
+    if (profileError) {
+      await supabase.auth.signOut();
+      alert("Profile not found.");
+      return;
+    }
+
+    if (profile.role !== "cashier") {
+      await supabase.auth.signOut();
+      alert("Access denied.");
+      return;
+    }
+
+    localStorage.setItem("role", profile.role);
+    localStorage.setItem("last_activity", Date.now());
+    localStorage.setItem("expires_at", Date.now() + 60 * 60 * 1000);
+
+    navigate("/admin/orders");
+  } finally {
+    setLoading(false);
   }
-
-if (profileError) {
-  await supabase.auth.signOut();
-  alert("Profile not found.");
-  return;
-}
-
-if (profile.role !== "admin") {
-  await supabase.auth.signOut();
-  alert("Access denied.");
-  return;
-}
-
-// Save login session
-localStorage.setItem("role", profile.role);
-localStorage.setItem("last_activity", Date.now());
-localStorage.setItem("expires_at", Date.now() + 60 * 60 * 1000);
-
-navigate("/admin/dashboard");
 }
 
   return (
@@ -59,7 +62,7 @@ navigate("/admin/dashboard");
         </h1>
 
         <p className="text-center text-gray-500 mt-2">
-          Admin Login
+          Cashier Login
         </p>
 
         <form onSubmit={handleLogin} className="space-y-4 mt-8">
