@@ -43,7 +43,7 @@ async function fetchProducts() {
           OVER
         </h1>
         <p className="text-sm text-gray-300">
-          Fresh • Hot • Delicious
+          Bites & Drinks
         </p>
       </div>
 
