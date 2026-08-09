@@ -57,7 +57,7 @@ if (!lastActivity || Date.now() - lastActivity > ONE_HOUR) {
   setIsOpen={setSidebarOpen}
 />
 
-<div className="flex-1 flex flex-col md:ml-64">
+<div className="flex-1 flex flex-col overflow-hidden">
   <Topbar setSidebarOpen={setSidebarOpen} />
 
         <main className="flex-1 overflow-auto p-6">

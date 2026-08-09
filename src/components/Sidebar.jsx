@@ -11,11 +11,18 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     }`;
 
   return (
-    <aside
+   <aside
   className={`
-    fixed md:static top-0 left-0 z-50
-    h-screen bg-slate-900 text-white p-6
-    w-64 transition-transform duration-300
+    fixed md:relative
+    top-0 left-0
+    z-50
+    w-64
+    h-screen
+    flex-shrink-0
+    bg-slate-900
+    text-white
+    p-6
+    transition-transform duration-300
     ${isOpen ? "translate-x-0" : "-translate-x-full"}
     md:translate-x-0
   `}

@@ -74,83 +74,109 @@ export default function Dashboard() {
 
   // 👇 REPLACE YOUR OLD RETURN WITH THE NEW RETURN HERE
 return (
+  <div>
+    <h1 className="text-2xl md:text-3xl font-bold mb-6">
+      Dashboard
+    </h1>
 
-<div>
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-6">
 
-<h1 className="text-2xl md:text-3xl font-bold mb-6">
-Dashboard
-</h1>
+      {/* Revenue */}
+      <div className="min-w-[220px] bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">
+              Today's Revenue
+            </p>
 
-<div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
+            <h2 className="text-2xl md:text-3xl font-bold text-green-600 mt-2">
+              ₹{stats.revenue}
+            </h2>
+          </div>
 
-  {/* Revenue */}
- <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-gray-500 text-xs md:text-sm font-medium">Today's Revenue</p>
-        <h2 className="text-3xl font-bold text-green-600 mt-2">
-          ₹{stats.revenue}
-        </h2>
+          <div className="text-4xl">
+            💰
+          </div>
+        </div>
       </div>
-      <div className="text-3xl md:text-4xl">💰</div>
+
+      {/* Orders */}
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-blue-500 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">
+              Today's Orders
+            </p>
+
+            <h2 className="text-2xl md:text-3xl font-bold mt-2">
+              {stats.orders}
+            </h2>
+          </div>
+
+          <div className="text-4xl">
+            🛒
+          </div>
+        </div>
+      </div>
+
+      {/* Preparing */}
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-purple-500 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">
+              Preparing
+            </p>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-purple-600 mt-2">
+              {stats.preparing}
+            </h2>
+          </div>
+
+          <div className="text-4xl">
+            👨‍🍳
+          </div>
+        </div>
+      </div>
+
+      {/* Ready */}
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-orange-500 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">
+              Ready
+            </p>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-orange-600 mt-2">
+              {stats.ready}
+            </h2>
+          </div>
+
+          <div className="text-4xl">
+            🍽️
+          </div>
+        </div>
+      </div>
+
+      {/* Completed */}
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-emerald-500 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">
+              Completed
+            </p>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-emerald-600 mt-2">
+              {stats.completed}
+            </h2>
+          </div>
+
+          <div className="text-4xl">
+            ✅
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-
-  {/* Orders */}
-<div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-gray-500 text-xs md:text-sm font-medium">Today's Orders</p>
-        <h2 className="text-3xl font-bold mt-2">
-          {stats.orders}
-        </h2>
-      </div>
-      <div className="text-3xl md:text-4xl">🛒</div>
-    </div>
-  </div>
-
-  {/* Preparing */}
-<div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-gray-500 text-xs md:text-sm font-medium">Preparing</p>
-        <h2 className="text-3xl font-bold text-purple-600 mt-2">
-          {stats.preparing}
-        </h2>
-      </div>
-      <div className="text-3xl md:text-4xl">👨‍🍳</div>
-    </div>
-  </div>
-
-  {/* Ready */}
-<div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-gray-500 text-xs md:text-sm font-medium">Ready for Pickup</p>
-        <h2 className="text-3xl font-bold text-amber-600 mt-2">
-          {stats.ready}
-        </h2>
-      </div>
-      <div className="text-3xl md:text-4xl">🍽️</div>
-    </div>
-  </div>
-
-  {/* Completed */}
-<div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border-l-4 border-green-500 p-5">
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <p className="text-gray-500 text-xs md:text-sm font-medium">Completed</p>
-        <h2 className="text-3xl font-bold text-emerald-600 mt-2">
-          {stats.completed}
-        </h2>
-      </div>
-      <div className="text-3xl md:text-4xl">✅</div>
-    </div>
-  </div>
-
-</div>
-
-</div>
-
 );
 }
