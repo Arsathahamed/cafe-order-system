@@ -14,7 +14,7 @@ export default function Home() {
         />
 
         <p className="text-gray-300 text-lg mt-6">
-          Fresh • Hot • Delicious
+          Bites & Drinks
         </p>
 
         <Link
