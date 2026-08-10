@@ -17,10 +17,16 @@ export default function Dashboard() {
   // Start of today (00:00:00)
   today.setHours(0, 0, 0, 0);
 
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*")
-    .gte("created_at", today.toISOString());
+const { data, error } = await supabase
+  .from("orders")
+  .select("*")
+  .gte("created_at", today.toISOString())
+  .in("status", [
+    "Payment Verified",
+    "Preparing",
+    "Ready for Pickup",
+    "Completed",
+  ]);
 
   if (error) {
     console.log(error);

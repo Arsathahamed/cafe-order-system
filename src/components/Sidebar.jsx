@@ -75,7 +75,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         {/* Admin Only */}
         {role === "admin" && (
           <>
-            <NavLink to="/kitchen" className={menuClass}>
+            <NavLink to="/admin/kitchen" className={menuClass}>
               <span>👨‍🍳</span>
               <span>Kitchen</span>
             </NavLink>

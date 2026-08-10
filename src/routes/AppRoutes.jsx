@@ -24,6 +24,7 @@ import Reports from "../pages/admin/Reports";
 import Settings from "../pages/admin/Settings";
 
 import Kitchen from "../pages/kitchen/Kitchen";
+import AdminKitchen from "../pages/admin/Kitchen";
 
 export default function AppRoutes() {
   return (
@@ -102,7 +103,14 @@ export default function AppRoutes() {
               </ProtectedRoute>
             }
           />
-
+<Route
+  path="kitchen"
+  element={
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <AdminKitchen />
+    </ProtectedRoute>
+  }
+/>
           <Route
             path="reports"
             element={
@@ -125,14 +133,14 @@ export default function AppRoutes() {
 
         {/* ================= KITCHEN ================= */}
 
-        <Route
-          path="/kitchen"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "kitchen"]}>
-              <Kitchen />
-            </ProtectedRoute>
-          }
-        />
+<Route
+  path="/kitchen"
+  element={
+    <ProtectedRoute allowedRoles={["kitchen"]}>
+      <Kitchen />
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
     </BrowserRouter>

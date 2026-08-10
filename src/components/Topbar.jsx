@@ -38,10 +38,6 @@ export default function Topbar({ setSidebarOpen }) {
           ☰
         </button>
 
-        <h2 className="text-lg md:text-2xl font-bold">
-          OVER Dashboard
-        </h2>
-
       </div>
 
       {/* Right */}

@@ -4,7 +4,7 @@ import newOrderSound from "../../assets/sounds/new-order.wav";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 export default function Kitchen() {
-    const navigate = useNavigate();
+  
   const [orders, setOrders] = useState([]);
 const notification = useRef(null);
 
@@ -80,15 +80,7 @@ useEffect(() => {
 
     loadOrders();
   }
-  async function handleLogout() {
-  await supabase.auth.signOut();
-
-  localStorage.removeItem("role");
-  localStorage.removeItem("last_activity");
-  localStorage.removeItem("expires_at");
-
-  navigate("/kitchen/login", { replace: true });
-}
+ 
 function getElapsedTime(date) {
   const diff = Math.floor(
     (Date.now() - new Date(date)) / 60000
@@ -102,20 +94,9 @@ function getElapsedTime(date) {
 }
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
-
-<div className="flex items-center justify-between mb-8">
-  <h1 className="text-2xl md:text-4xl font-bold">
-    👨‍🍳 Kitchen Display
-  </h1>
-
-  <button
-    onClick={handleLogout}
-    className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg font-semibold"
-  >
-    Logout
-  </button>
-</div>
-
+<h1 className="text-3xl font-bold mb-6">
+  Kitchen Orders
+</h1>
       {orders.length === 0 ? (
         <div className="text-center text-gray-500 text-lg md:text-2xl mt-20">
           No Orders
