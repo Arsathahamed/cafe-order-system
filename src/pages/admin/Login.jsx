@@ -1,15 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../services/supabase";
+import { toast } from "react-toastify";
+import {
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiLogIn,
+} from "react-icons/fi";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(e) {
+
+async function handleLogin(e) {
   e.preventDefault();
 
   setLoading(true);
@@ -18,77 +28,139 @@ export default function Login() {
     email,
     password,
   });
-const { data: profile, error: profileError } = await supabase
-  .from("profiles")
-  .select("role")
-  .eq("id", data.user.id)
-  .single();
-  setLoading(false);
 
   if (error) {
-    alert(error.message);
+    setLoading(false);
+    toast.error("Invalid email or password");
     return;
   }
 
-if (profileError) {
-  await supabase.auth.signOut();
-  alert("Profile not found.");
-  return;
-}
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", data.user.id)
+    .single();
 
-if (profile.role !== "admin") {
-  await supabase.auth.signOut();
-  alert("Access denied.");
-  return;
-}
+  setLoading(false);
 
-// Save login session
-localStorage.setItem("role", profile.role);
-localStorage.setItem("last_activity", Date.now());
-localStorage.setItem("expires_at", Date.now() + 60 * 60 * 1000);
+  if (profileError) {
+    await supabase.auth.signOut();
+    toast.error("Profile not found.");
+    return;
+  }
 
-navigate("/admin/dashboard");
+  if (profile.role !== "admin") {
+    await supabase.auth.signOut();
+    toast.warning("Access denied.");
+    return;
+  }
+
+  // Save login session
+  localStorage.setItem("role", profile.role);
+  localStorage.setItem("last_activity", Date.now());
+  localStorage.setItem("expires_at", Date.now() + 60 * 60 * 1000);
+
+  // ✅ Success message
+  toast.success("Welcome back, Admin!");
+
+  // Redirect after a short delay
+  setTimeout(() => {
+    navigate("/admin/dashboard");
+  }, 800);
 }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
-      <div className="bg-white p-8 rounded-xl w-full max-w-md shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
 
-        <h1 className="text-4xl text-center font-bold text-yellow-500">
-          OVER
-        </h1>
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8">
 
-        <p className="text-center text-gray-500 mt-2">
-          Admin Login
-        </p>
+        <div className="text-center">
 
-        <form onSubmit={handleLogin} className="space-y-4 mt-8">
+          <h1 className="text-5xl font-extrabold text-yellow-500">
+            OVER
+          </h1>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full border p-3 rounded-lg"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-          />
+          <p className="text-gray-500 mt-2">
+            Secure Admin Access
+          </p>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full border p-3 rounded-lg"
-            value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-          />
+        </div>
+
+        <form
+          onSubmit={handleLogin}
+          className="mt-10 space-y-5"
+        >
+
+          <div className="relative">
+
+            <FiMail className="absolute left-4 top-4 text-gray-400 text-lg" />
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              required
+              className="w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+          </div>
+
+          <div className="relative">
+
+            <FiLock className="absolute left-4 top-4 text-gray-400 text-lg" />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              required
+              className="w-full pl-12 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button
+              type="button"
+              className="absolute right-4 top-4 text-gray-500"
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+            >
+              {showPassword ? (
+                <FiEyeOff />
+              ) : (
+                <FiEye />
+              )}
+            </button>
+
+          </div>
 
           <button
-            className="w-full bg-yellow-500 text-white p-3 rounded-lg"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Signing In...
+              </>
+            ) : (
+              <>
+                <FiLogIn />
+                Login
+              </>
+            )}
           </button>
 
         </form>
 
+        <p className="text-center text-gray-400 text-sm mt-8">
+          © {new Date().getFullYear()} OVER POS
+        </p>
+
       </div>
+
     </div>
   );
 }
