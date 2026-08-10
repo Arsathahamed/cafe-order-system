@@ -24,7 +24,7 @@ import Reports from "../pages/admin/Reports";
 import Settings from "../pages/admin/Settings";
 
 import Kitchen from "../pages/kitchen/Kitchen";
-import AdminKitchen from "../pages/admin/Kitchen";
+import AdminKitchen from "../pages/admin/AdminKitchen";
 
 export default function AppRoutes() {
   return (
