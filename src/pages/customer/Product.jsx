@@ -140,76 +140,75 @@ const [quantity, setQuantity] = useState(1);
             </>
           )}
 
-          {addons.length > 0 && (
-            <>
-              <h2 className="text-xl font-bold mt-8 mb-4">
-                Add-ons
-              </h2>
+        {addons.length > 0 && (
+  <>
+    <h2 className="text-xl font-bold mt-8 mb-4">
+      Add-ons
+    </h2>
 
-              {addons.map((addon) => (
-                <label
-                  key={addon.id}
-                  className={`flex justify-between items-center rounded-xl p-4 mb-3 cursor-pointer border-2 transition-all ${
-                    selectedAddons.some(
-                      (item) => item.id === addon.id
-                    )
-                      ? "border-yellow-500 bg-yellow-50 shadow-md"
-                      : "border-gray-200 hover:border-yellow-300 hover:bg-gray-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
+    {addons.map((addon) => {
 
-                    <input
-                      type="checkbox"
-                      checked={selectedAddons.some(
-                        (item) => item.id === addon.id
-                      )}
-                      onChange={(e) => {
-                        let updatedAddons;
+      const isSelected = selectedAddons.some(
+        (item) => item.id === addon.id
+      );
 
-                        if (e.target.checked) {
-                          updatedAddons = [...selectedAddons, addon];
-                        } else {
-                          updatedAddons = selectedAddons.filter(
-                            (item) => item.id !== addon.id
-                          );
-                        }
+      return (
+        <label
+          key={addon.id}
+          className={`flex justify-between items-center rounded-xl p-4 mb-3 cursor-pointer border-2 transition-all ${
+            isSelected
+              ? "border-yellow-500 bg-yellow-50 shadow-md"
+              : "border-gray-200 hover:border-yellow-300 hover:bg-gray-50"
+          }`}
+        >
 
-                        setSelectedAddons(updatedAddons);
+          <div className="flex items-center gap-4">
 
-                        const addonTotal = updatedAddons.reduce(
-                          (sum, item) => sum + Number(item.price),
-                          0
-                        );
+            <input
+              type="radio"
+              name="addon"
+              checked={isSelected}
+              onChange={() => {
 
-const basePrice = Number(
-  selectedVariant?.price || product.price
-);
+                // Only ONE addon can be selected
+                const updatedAddons = [addon];
 
-setTotalPrice((basePrice + addonTotal) * quantity);
-                      }}
-                      className="w-5 h-5 accent-yellow-500"
-                    />
+                setSelectedAddons(updatedAddons);
 
-                    <div>
-                      <h3 className="font-semibold">
-                        {addon.name}
-                      </h3>
+                const addonTotal = Number(addon.price);
 
-                      <p className="text-sm text-gray-500">
-                        Optional add-on
-                      </p>
-                    </div>
+                const basePrice = Number(
+                  selectedVariant?.price || product.price
+                );
 
-                  </div>
+                setTotalPrice(
+                  (basePrice + addonTotal) * quantity
+                );
+              }}
+              className="w-5 h-5 accent-yellow-500"
+            />
 
-                  <div className="font-bold text-yellow-600">
-                    +₹{addon.price}
-                  </div>
-                </label>
-              ))}
-            </>
-          )}
+            <div>
+              <h3 className="font-semibold">
+                {addon.name}
+              </h3>
+
+              <p className="text-sm text-gray-500">
+                Optional add-on
+              </p>
+            </div>
+
+          </div>
+
+          <div className="font-bold text-yellow-600">
+            +₹{addon.price}
+          </div>
+
+        </label>
+      );
+    })}
+  </>
+)}
 <div className="mt-8 mb-6 bg-white border border-gray-200 rounded-2xl shadow-sm p-5 flex items-center justify-between">
 
   <h3 className="font-semibold text-lg">
