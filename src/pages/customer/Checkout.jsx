@@ -117,19 +117,14 @@ export default function Checkout() {
   /*
    * Calculate reward discount
    */
-  const rewardDiscount = selectedReward
-    ? rewardType === "FREE"
-      ? Number(selectedReward.price)
-      : Number(selectedReward.price) / 2
-    : 0;
+const rewardPrice = selectedReward
+  ? rewardType === "FREE"
+    ? 0
+    : Number(selectedReward.price) / 2
+  : 0;
 
-  /*
-   * Final order total
-   */
-  const finalTotal = Math.max(
-    0,
-    Number(subtotal) - Number(rewardDiscount)
-  );
+const finalTotal =
+  Number(subtotal) + Number(rewardPrice);
 
   /*
    * Place Order
@@ -237,19 +232,18 @@ export default function Checkout() {
      * Go to payment
      */
     navigate("/payment", {
-      state: {
-        orderId: order.id,
-        orderNumber: order.order_number,
-        customerName,
-        mobile,
-        subtotal: finalTotal,
-        originalSubtotal: subtotal,
-        rewardType,
-        rewardProduct: selectedReward,
-        rewardDiscount,
-      },
-    });
-  };
+  state: {
+    orderId: order.id,
+    orderNumber: order.order_number,
+    customerName,
+    mobile,
+    subtotal: finalTotal,
+    originalSubtotal: subtotal,
+    rewardType,
+    rewardProduct: selectedReward,
+    rewardPrice,
+  },
+});
 
   return (
     <div className="min-h-screen bg-gray-100 pb-32">
@@ -436,34 +430,32 @@ export default function Checkout() {
           </div>
 
           {selectedReward && (
-            <>
-              <div className="flex justify-between text-green-600 mt-3">
+  <>
+    <div className="flex justify-between text-green-600 mt-3">
+      <span>
+        Loyalty Reward
+      </span>
 
-                <span>
-                  Loyalty Discount
-                </span>
+      <span className="font-bold">
+        {rewardType === "FREE"
+          ? "FREE"
+          : `₹${rewardPrice}`}
+      </span>
+    </div>
 
-                <span className="font-bold">
-                  -₹{rewardDiscount}
-                </span>
+    <div className="flex justify-between text-sm text-gray-500 mt-2">
+      <span>
+        {selectedReward.name}
+      </span>
 
-              </div>
-
-              <div className="flex justify-between text-sm text-gray-500 mt-2">
-
-                <span>
-                  {selectedReward.name}
-                </span>
-
-                <span>
-                  {rewardType === "FREE"
-                    ? "FREE"
-                    : "50% OFF"}
-                </span>
-
-              </div>
-            </>
-          )}
+      <span>
+        {rewardType === "FREE"
+          ? "FREE"
+          : "50% OFF"}
+      </span>
+    </div>
+  </>
+)}
 
           <hr className="my-4" />
 
