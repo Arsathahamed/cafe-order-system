@@ -244,7 +244,7 @@ const finalTotal =
     rewardPrice,
   },
 });
-
+  };
   return (
     <div className="min-h-screen bg-gray-100 pb-32">
 
