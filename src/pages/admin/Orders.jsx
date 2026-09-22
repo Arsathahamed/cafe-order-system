@@ -111,6 +111,150 @@ async function updateStatus(id, status) {
     loadOrders();
   }
 }
+async function verifyPaymentAndPrint(order) {
+  // Open print window immediately so Android/browser allows printing
+  const printWindow = window.open("", "_blank", "width=400,height=600");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups to print the bill.");
+    return;
+  }
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Order #${order.order_number}</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2 style="text-align:center;">OVER</h2>
+        <p style="text-align:center;">Bites & Drinks</p>
+        <hr />
+        <p>Loading bill...</p>
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  // Verify payment
+  const { error: statusError } = await supabase
+    .from("orders")
+    .update({
+      status: "Payment Verified",
+    })
+    .eq("id", order.id);
+
+  if (statusError) {
+    printWindow.close();
+    console.error(statusError);
+    alert("Failed to verify payment.");
+    return;
+  }
+
+  // Get order items
+  const { data: items, error: itemsError } = await supabase
+    .from("order_items")
+    .select("*")
+    .eq("order_id", order.id);
+
+  if (itemsError) {
+    printWindow.close();
+    console.error(itemsError);
+    alert("Payment verified, but failed to load bill items.");
+    return;
+  }
+
+  const itemsHtml = (items || [])
+    .map(
+      (item) => `
+        <div style="margin-bottom:10px;">
+          <div style="font-weight:bold;">
+            ${item.product_name}
+          </div>
+
+          ${
+            item.variant_name
+              ? `<div style="font-size:12px;">${item.variant_name}</div>`
+              : ""
+          }
+
+          <div style="font-size:12px;">
+            Qty: ${item.quantity} × ₹${Number(item.unit_price).toFixed(2)}
+          </div>
+
+          <div style="text-align:right; font-weight:bold;">
+            ₹${Number(item.total).toFixed(2)}
+          </div>
+        </div>
+      `
+    )
+    .join("");
+
+  printWindow.document.body.innerHTML = `
+    <div style="
+      width: 280px;
+      margin: 0 auto;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    ">
+
+      <h2 style="text-align:center; margin-bottom:2px;">
+        OVER
+      </h2>
+
+      <p style="text-align:center; margin-top:0;">
+        Bites & Drinks
+      </p>
+
+      <hr />
+
+      <div>
+        <strong>Order:</strong> #${order.order_number}
+      </div>
+
+      <div>
+        <strong>Customer:</strong> ${order.customer_name}
+      </div>
+
+      <div>
+        <strong>Mobile:</strong> ${order.mobile}
+      </div>
+
+      <hr />
+
+      ${itemsHtml}
+
+      <hr />
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        font-size:18px;
+        font-weight:bold;
+      ">
+        <span>Total</span>
+        <span>₹${Number(order.subtotal).toFixed(2)}</span>
+      </div>
+
+      <p style="text-align:center; margin-top:25px;">
+        Payment Verified
+      </p>
+
+      <p style="text-align:center;">
+        Thank you!
+      </p>
+
+    </div>
+  `;
+
+  // Give browser time to render receipt
+  setTimeout(() => {
+    printWindow.focus();
+    printWindow.print();
+  }, 300);
+
+  loadOrders();
+}
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">
@@ -169,13 +313,13 @@ async function updateStatus(id, status) {
   View
 </button>
 
-  {order.status === "Waiting for Payment Verification" && (
-    <button
-      onClick={() => updateStatus(order.id, "Payment Verified")}
-      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
-    >
-      ✔ Verify Payment
-    </button>
+{order.status === "Waiting for Payment Verification" && (
+  <button
+    onClick={() => verifyPaymentAndPrint(order)}
+    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+  >
+    ✔ Verify Payment
+  </button>
 )}
 
   {order.status === "Ready for Pickup" && (
@@ -249,16 +393,14 @@ async function updateStatus(id, status) {
           View
         </button>
 
-        {order.status === "Waiting for Payment Verification" && (
-          <button
-            onClick={() =>
-              updateStatus(order.id, "Payment Verified")
-            }
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
-          >
-            ✔ Verify Payment
-          </button>
-        )}
+{order.status === "Waiting for Payment Verification" && (
+  <button
+    onClick={() => verifyPaymentAndPrint(order)}
+    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+  >
+    ✔ Verify Payment
+  </button>
+)}
 
         {order.status === "Ready for Pickup" && (
           <button
